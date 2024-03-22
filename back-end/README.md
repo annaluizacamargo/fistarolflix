@@ -1,6 +1,6 @@
 # 👩🏻‍💻 FistarolFlix Back-end 👩🏻
 <br>
-<a href="portuguese">Readme em Português</a> || <a href="english">Readme in English</a>
+<a href="#portuguese">Readme em Português</a> || <a href="#english">Readme in English</a>
 
 <a id="portuguese"></a>
 # Readme em Português
@@ -32,8 +32,8 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias:
 - **JWT(JsonWebToken)**: Biblioteca utilizada para autenticação de usuários.
 <br><br><br>
 
-# Readme in English
 <a id="english"></a>
+# Readme in English
 ## 🚀 Challenge Proposal:
 Project built with TypeORM, Express and Docker, using TypeScript, MySQL and JWT with Bcrypt, aiming to create a movie streaming system for a fullstack technical test of a company, with the objective of creating a CRUD of movies and users, in addition to user authentication and authorization with a deadline of 3 days to build the back-end and front-end.
 <br><br>
