@@ -1,22 +1,45 @@
-import { DataSource, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { User } from "../entity/User";
+import { IUser } from "../dto/IUser";
+import { AppDataSource } from "../data-source";
 
+/**
+ * Class that represents the repository of the user entity
+ * @class
+ * @property {Repository<User>} repository - Repository of user entity
+ * @method createAndSave - Method to creaWte and save a user
+ * @method findUsers - Method to find all users
+ * @method findByEmail - Method to find a user by email
+ * @method findById - Method to find a user by id
+ * @method updateUser - Method to update a user
+ * @method enableOrDisableUser - Method to enable or disable a user
+ */
+class UserRepository {
+  private repository: Repository<User> =
+    AppDataSource.manager.getRepository(User);
 
-class UserRepository extends Repository<User> {
-    //private repository: Repository<User> = DataSource.getRepository(User);
-  async findByEmail(email: string) {
-    return this.findOne({ where: { email } });
+  async createAndSave(user: User) {
+    return await this.repository.save(user);
   }
 
-  async findById(id: number) {
-    return this.findOne({ where: { id } });
+  async findUsers() {
+    return await this.repository.find();
   }
 
-  async createAndSave(name: string, email: string, password: string) {
-    console.log('chegou createAndSave')
-    const user = this.create({ name, email, password });
-    console.log('chegou createAndSave/user')
-    return this.save(user);
+  async findByEmail(email: IUser["email"]) {
+    return this.repository.findOne({ where: { email } });
+  }
+
+  async findById(id: IUser["id"]) {
+    return this.repository.findOne({ where: { id } });
+  }
+
+  async updateUser({ id, name, email, hashedPassword }: IUser) {
+    return this.repository.update(id, { name, email, hashedPassword });
+  }
+
+  async enableOrDisableUser(id: IUser["id"], isActive: IUser["isActive"]) {
+    return this.repository.update(id, { isActive: isActive });
   }
 }
 
