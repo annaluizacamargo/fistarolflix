@@ -1,99 +1,154 @@
-import { Request, Response } from 'express';
-import UserRepository from '../repository/UserRepository';
+import { Request, Response } from "express";
+import { User } from "../entity/User";
+import { hash, compare } from "bcrypt";
+import { sign } from "jsonwebtoken";
+import UserRepository from "../repository/UserRepository";
 
+/**
+ * Class that represents the user controller
+ * @class
+ * @method create - Method to create a user
+ * @method login - Method to login a user
+ * @method get - Method to get all users
+ * @method getById - Method to get a user by id
+ * @method getByEmail - Method to get a user by email
+ * @method update - Method to update a user
+ * @method patch - Method to enable or disable a user
+ */
 class UserController {
   async create(request: Request, response: Response) {
-    // const repository = getRepository(User);
-    console.log('chegou aqui')
     const { name, email, password } = request.body;
 
-    console.log('chegou aquiasfadf', request.body)
-    //const userExists = await userRepository.findOne({ where: { email } });
+    if (!name || !email || !password) {
+      return response.sendStatus(400);
+    }
 
-    //const password: string = await bcrypt.hash(userPassword, 8);
+    const hashedPassword = await hash(password ?? "", 8);
+    const user = new User(name, email, hashedPassword, true);
+    const userRepository = new UserRepository();
+    const userAlreadyCreate = await userRepository.findByEmail(email);
 
-    // if (userExists) {
-    //   return response.sendStatus(409);
-    // }
+    if (userAlreadyCreate) {
+      return response.sendStatus(409);
+    }
 
-    const repository = new UserRepository();
-    const user = repository.create({ name, email, password });
+    const data = await userRepository.createAndSave(user);
 
-    await repository.save(user);
+    if (!data) {
+      return response.sendStatus(400);
+    }
 
-    return response.status(201).json(user);
+    const token = sign(
+      {
+        id: data.id,
+        name: data.email,
+        email: data.email,
+        isActive: data.isActive,
+      },
+      process.env.SECRET_KEY || "",
+      { expiresIn: "1h" }
+    );
+
+    return response.status(201).json({ data, token });
   }
 
-  // async login(request: Request, response: Response) {
-  //   const repository = getRepository(User);
-  //   const { email, userPassword } = request.body;
+  async login(request: Request, response: Response) {
+    const { email, password } = request.body;
+    const userRepository = new UserRepository();
+    const data = await userRepository.findByEmail(email);
 
-  //   const user = await repository.findOne({ where: { email } });
-  //   const password: string = await bcrypt.hash(userPassword, 8);
+    if (!data) {
+      return response.sendStatus(400);
+    }
 
-  //   if (!user) {
-  //     return response.sendStatus(401);
-  //   }
+    const isValidPassword = await compare(password, data.hashedPassword);
 
-  //   const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return response.sendStatus(401);
+    }
 
-  //   if (!isValidPassword) {
-  //     return response.sendStatus(401);
-  //   }
+    const token = sign(
+      {
+        id: data.id,
+        name: data.email,
+        email: data.email,
+        isActive: data.isActive,
+      },
+      process.env.SECRET_KEY || "",
+      { expiresIn: "1h" }
+    );
 
-  //   const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1h' });
+    return response.json({
+      data,
+      token,
+    });
+  }
 
-  //   //delete user.password;
+  async get(request: Request, response: Response) {
+    const userRepository = new UserRepository();
+    const data = await userRepository.findUsers();
 
-  //   return response.json({
-  //     user,
-  //     token,
-  //   });
-  // }
+    return response.json(data);
+  }
 
-  //   async get(request: Request, response: Response) {
-  //       const repository = getRepository(User);
-  //       const users = await repository.find();
-    
-  //       return response.json(users);
-  //   }
+  async getById(request: Request, response: Response) {
+    const { id } = request.params;
+    const idNumber = parseInt(id);
 
-  //   async getById(request: Request, response: Response) {
-  //       const repository = getRepository(User);
-  //       const { id } = request.params;
-  //       const user = await repository.findOne({ where: { id } });
-    
-  //       if (!user) {
-  //           return response.sendStatus(404);
-  //       }
-    
-  //       return response.json(user);
-  //   }
+    if (isNaN(idNumber)) {
+      return response.sendStatus(400);
+    }
 
-  //   async update(request: Request, response: Response) {
-  //       const repository = getRepository(User);
-  //       const { id } = request.params;
-  //       const { name, email } = request.body;
-    
-  //       await repository.update(id, {
-  //           name,
-  //           email,
-  //       });
-    
-  //       return response.sendStatus(200);
-  //   }
+    const userRepository = new UserRepository();
+    const data = await userRepository.findById(idNumber);
 
-  //   async patch(request: Request, response: Response) {
-  //       const repository = getRepository(User);
-  //       const { id } = request.params;
-  //       const { active } = request.body;
-    
-  //       await repository.update(id, {
-  //           active
-  //       });
-    
-  //       return response.sendStatus(200);
-  //   }
+    if (!data) {
+      return response.sendStatus(404);
+    }
+
+    return response.json(data);
+  }
+
+  async getByEmail(request: Request, response: Response) {
+    const { email } = request.params;
+    const userRepository = new UserRepository();
+    const data = await userRepository.findByEmail(email);
+
+    if (!data) {
+      return response.sendStatus(404);
+    }
+
+    return response.json(data);
+  }
+
+  async update(request: Request, response: Response) {
+    const { idUser, name, email, hashedPassword } = request.body;
+    const id = parseInt(idUser);
+    const userRepository = new UserRepository();
+
+    if (isNaN(id)) {
+      return response.sendStatus(400);
+    }
+
+    await userRepository.updateUser({ id, name, email, hashedPassword });
+
+    return response.sendStatus(200);
+  }
+
+  async patch(request: Request, response: Response) {
+    const { id } = request.params;
+    const { isActive } = request.body;
+    const idNumber = parseInt(id);
+    const userRepository = new UserRepository();
+
+    if (isNaN(idNumber)) {
+      return response.sendStatus(400);
+    }
+
+    await userRepository.enableOrDisableUser(idNumber, isActive);
+
+    return response.sendStatus(200);
+  }
 }
 
 export default UserController;
