@@ -4,7 +4,7 @@ import MovieController from "./controllers/MovieController";
 import "reflect-metadata";
 require('dotenv').config();
 
-const port = 3000;
+const port = 3333;
 
 const app = express();
 
