@@ -22,7 +22,9 @@
     "eslint-config-next": "14.1.4",
     "react-hook-form": "7.51.1",
     "typescript": "^5",
-    "yup": "0.32.11"
+    "yup": "0.32.11",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1"
   },
   "engines": {
     "node": "18.x"
