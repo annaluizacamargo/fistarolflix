@@ -56,7 +56,9 @@ export default function RegisterForm() {
       const responseData = await response.json()
 
       if (response && response.ok) {
-        window.localStorage.setItem('token', responseData.token)
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem('token', responseData.token)
+        }
 
         const users = await fetch('/api/users', {
           method: 'POST',

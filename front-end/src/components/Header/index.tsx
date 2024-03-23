@@ -15,11 +15,15 @@ export default function Header() {
   const { users, activeUser, setActiveUser } = useUserContext()
   const url = usePathname() || ''
   const unloggedPages = ['/login', '/register']
-  const isUnlogged = typeof window !== 'undefined' && unloggedPages.includes(url)
   const [activeMenuOption, setActiveMenuOption] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
+  const [isUnlogged, setIsUnlogged] = useState(true)
   const profileName = activeUser?.name ?? 'Perfil 1'
   const profileEmail = activeUser?.email ?? 'perfil@teste.com'
+
+  if (typeof window !== 'undefined') {
+    setIsUnlogged(typeof window !== 'undefined' && unloggedPages.includes(url))
+  }
 
   const menuOptions = [
     { name: 'Início', url: '/home', icon: '/home-logo.svg', alt: 'Ícone de início' },
