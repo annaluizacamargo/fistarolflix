@@ -1,15 +1,15 @@
 'use client'
 
-import { ILoginAndRegisterFormData, LoginSchema, LoginSchemaData } from '@/components/ModalLogin/types'
+import { ILoginAndRegisterFormData, RegisterSchema, RegisterSchemaData } from '@/components/ModalLogin/types'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import PrimaryButton from '@/components/Button'
 import yupResolver from '@/components/ModalLogin/yupResolver'
 import Link from 'next/link'
-import Styles from '@/components/ModalLogin/modal-login.module.scss'
+import Styles from '../modal-login.module.scss'
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -20,8 +20,8 @@ export default function LoginForm() {
     formState: { errors },
     clearErrors,
     watch,
-  } = useForm<LoginSchemaData>({
-    resolver: yupResolver(LoginSchema),
+  } = useForm<RegisterSchemaData>({
+    resolver: yupResolver(RegisterSchema),
   })
 
   const onHandleChangeRegister = (e: React.ChangeEvent<HTMLInputElement>, clearErrors: () => void) => {
@@ -29,18 +29,20 @@ export default function LoginForm() {
   }
 
   const watchEmail = watch('email')
+  const watchName = watch('name')
   const watchPassword = watch('password')
   const isEmailFilled = Boolean(watchEmail)
+  const isNameFilled = Boolean(watchName)
   const isPasswordFilled = Boolean(watchPassword)
-
   register('email', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
+  register('name', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
   register('password', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
 
   const onSubmitHandler = async (data: ILoginAndRegisterFormData) => {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ export default function LoginForm() {
 
         setError('root', {
           type: 'manual',
-          message: 'A senha ou email estão incorretos.',
+          message: 'Houve um erro ao tentar cadastrar o usuário. Tente novamente.',
         })
       }
     } catch (error: any) {
@@ -71,10 +73,10 @@ export default function LoginForm() {
   return (
     <form
       className={Styles.form}
-      style={{ gap: errors.root ? '1rem' : '2rem' }}
+      style={{ gap: errors.root ? '0.5rem' : '2rem' }}
       onSubmit={handleSubmit(onSubmitHandler)}
     >
-      <div className={Styles.inputsLogin}>
+      <div className={Styles.inputsRegister}>
         <input
           id="email"
           type="email"
@@ -83,12 +85,9 @@ export default function LoginForm() {
           placeholder="Informe seu email"
           {...register('email')}
         />
+        <input id="name" type="text" title="Nome" placeholder="Informe seu nome" {...register('name')} />
 
-        <div className={Styles.password}>
-          <input id="password" type="password" title="Senha" placeholder="Insira sua senha" {...register('password')} />
-
-          <Link href="#">Esqueci minha senha</Link>
-        </div>
+        <input id="password" type="password" title="Senha" placeholder="Insira sua senha" {...register('password')} />
       </div>
 
       <div className={Styles.buttons}>
@@ -98,13 +97,13 @@ export default function LoginForm() {
           </div>
         )}
 
-        <PrimaryButton type={'submit'} disabled={!isEmailFilled || !isPasswordFilled || loading}>
-          {loading ? 'Carregando...' : 'Entrar'}
+        <PrimaryButton type={'submit'} disabled={!isEmailFilled || !isPasswordFilled || !isNameFilled || loading}>
+          {loading ? 'Carregando...' : 'Cadastrar'}
         </PrimaryButton>
 
         <div className={Styles.newHere}>
-          <p>Novo por aqui?</p>
-          <Link href="/cadastro">Crie sua conta</Link>
+          <span>Já possui uma conta?</span>
+          <Link href="/login">Faça seu login</Link>
         </div>
       </div>
     </form>
