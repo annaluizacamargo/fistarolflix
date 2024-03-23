@@ -22,5 +22,8 @@
     "eslint-config-next": "14.1.4",
     "react-hook-form": "7.51.1",
     "yup": "0.32.11"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
