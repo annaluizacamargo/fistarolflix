@@ -8,7 +8,8 @@ export async function POST(request: Request) {
 
   // If the request is made from localhost, it will be sent to the back-end API
   // Else, it will return a fake response with a fake token to test the front-end
-  if (url.hostname == 'localhost') {
+  if (url.hostname != 'localhost') {
+    //TODO: MUDAR PARA ==
     try {
       const postData = await request.json()
       const { email, password } = postData
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
         throw new Error(data.message)
       }
 
-      return NextResponse.json(data)
+      return NextResponse.json({ ...data, isMock: true }) //TODO: MUDAR PARA FALSE
     } catch (error) {
       return NextResponse.error()
     }
@@ -36,11 +37,9 @@ export async function POST(request: Request) {
       id: 1,
       name: 'Usuário Teste',
       email: 'usuario@teste.com',
-      password: 'Wa123456',
+      password: await hash('Wa123456', 8),
       isActive: true,
     }
-
-    const hashedPasswordExample = await hash(fakeData.password, 8)
 
     const fakeToken = jwt.sign(
       {
@@ -53,23 +52,11 @@ export async function POST(request: Request) {
       { expiresIn: '1h' }
     )
 
-    return new Response(
-      JSON.stringify({
-        data: {
-          name: 'Usuário Teste',
-          email: 'usuario@teste.com',
-          password: hashedPasswordExample,
-          token: 'token',
-          isActive: true,
-        },
-        token: fakeToken,
-      }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    return new Response(JSON.stringify({ ...fakeData, token: fakeToken, isMock: true }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
   }
 }

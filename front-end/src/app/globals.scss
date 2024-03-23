@@ -1,21 +1,27 @@
 :root {
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-  --font-family: "Poppins", sans-serif;
-  --background-color: #202020;
-  --primary-color: #FA627C;
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono',
+    'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+
+  --font-family: 'Poppins', sans-serif;
+  --primary-color: #fa627c;
   --secondary-color: #ce4e63;
-  --tertiary-color: #B1757F;
-  --white-color: #FAFAFA;
-  --gray-dark-color: #1C1B19;
-  --gray: #3D3D3F;
+  --tertiary-color: #b1757f;
+  --white-color: #fafafa;
   --gray-light-color: #888888;
+  --gray-default-color: #383838;
+  --gray-dark-color: #1c1b19;
+  --background-color: #202020;
+
+  --error-color: #b60000;
+  --warning-color: #ffa500;
+  --success-color: #008000;
+
   --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
   --font-size-nano: 0.75rem; //12px
   --font-size-micro: 0.875rem; //14px
   --font-size-small: 1rem; //16px
@@ -25,9 +31,6 @@
   --font-size-xxlarge: 2rem; //32px
   --font-size-xxxlarge: 2.5rem; //40px
   --font-size-xxxxlarge: 3.5rem; //56px
-  --error-color: #b60000;
-  --warning-color: #FFA500;
-  --success-color: #008000;
 }
 
 * {

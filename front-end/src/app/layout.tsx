@@ -1,12 +1,10 @@
-import type { Metadata } from 'next'
+'use client'
+
+import { UserProvider } from '@/providers/Profile'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import './globals.scss'
-
-export const metadata: Metadata = {
-  title: 'FistarolFlix',
-  description: 'FistarolFlix - The best movies and series in one place',
-}
+import Auth from '@/middleware/auth'
 
 export default function RootLayout({
   children,
@@ -15,10 +13,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>FistarolFlix</title>
+        <meta name="description" content="FistarolFlix - The best movies and series in one place" />
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <UserProvider>
+          <Header />
+          <Auth>{children}</Auth>
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   )

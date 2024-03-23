@@ -1,6 +1,7 @@
 'use client'
 
 import { ILoginAndRegisterFormData, LoginSchema, LoginSchemaData } from '@/components/ModalLogin/types'
+import { useUserContext } from '@/providers/Profile'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
@@ -12,6 +13,7 @@ import Styles from '@/components/ModalLogin/modal-login.module.scss'
 export default function LoginForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const { addUser } = useUserContext()
 
   const {
     register,
@@ -48,7 +50,23 @@ export default function LoginForm() {
         body: JSON.stringify(data),
       })
 
+      const responseData = await response.json()
+
       if (response && response.ok) {
+        window.localStorage.setItem('token', responseData.token)
+
+        const users = await fetch('/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(responseData),
+        })
+
+        const usersData = await users.json()
+
+        addUser(usersData)
+
         router.push('/home')
       } else {
         setLoading(false)

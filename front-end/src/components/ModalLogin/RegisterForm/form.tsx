@@ -1,6 +1,7 @@
 'use client'
 
 import { ILoginAndRegisterFormData, RegisterSchema, RegisterSchemaData } from '@/components/ModalLogin/types'
+import { useUserContext } from '@/providers/Profile'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
@@ -12,6 +13,7 @@ import Styles from '../modal-login.module.scss'
 export default function RegisterForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const { addUser } = useUserContext()
 
   const {
     register,
@@ -34,6 +36,7 @@ export default function RegisterForm() {
   const isEmailFilled = Boolean(watchEmail)
   const isNameFilled = Boolean(watchName)
   const isPasswordFilled = Boolean(watchPassword)
+
   register('email', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
   register('name', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
   register('password', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
@@ -50,7 +53,23 @@ export default function RegisterForm() {
         body: JSON.stringify(data),
       })
 
+      const responseData = await response.json()
+
       if (response && response.ok) {
+        window.localStorage.setItem('token', responseData.token)
+
+        const users = await fetch('/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(responseData),
+        })
+
+        const usersData = await users.json()
+
+        addUser(usersData)
+
         router.push('/home')
       } else {
         setLoading(false)
