@@ -1,5 +1,5 @@
-import ModalLogin from '@/components/ModalLogin'
+import LoginModal from '@/components/LoginModal'
 
 export default function Login() {
-  return <ModalLogin isLogin />
+  return <LoginModal isLogin />
 }

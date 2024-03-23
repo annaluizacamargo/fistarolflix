@@ -1,13 +1,13 @@
 'use client'
 
-import LoginForm from '@/components/ModalLogin/LoginForm/form'
-import RegisterForm from '@/components/ModalLogin/RegisterForm/form'
+import LoginForm from '@/components/LoginModal/LoginForm/form'
+import RegisterForm from '@/components/LoginModal/RegisterForm/form'
 import Banner from '@/public/banner-login.png'
 import Logo from '@/public/fistarolflix-heart-logo.svg'
 import Image from 'next/image'
 import Styles from './modal-login.module.scss'
 
-export default function ModalLogin({ isLogin = false }: Readonly<{ isLogin?: boolean }>) {
+export default function LoginModal({ isLogin = false }: Readonly<{ isLogin?: boolean }>) {
   const title = isLogin ? 'Entrar' : 'Cadastre-se'
 
   return (

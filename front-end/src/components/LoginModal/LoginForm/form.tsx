@@ -1,14 +1,14 @@
 'use client'
 
-import { ILoginAndRegisterFormData, LoginSchema, LoginSchemaData } from '@/components/ModalLogin/types'
+import { ILoginAndRegisterFormData, LoginSchema, LoginSchemaData } from '@/components/LoginModal/types'
 import { useUserContext } from '@/providers/Profile'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import PrimaryButton from '@/components/Button'
-import yupResolver from '@/components/ModalLogin/yupResolver'
+import yupResolver from '@/components/LoginModal/yupResolver'
 import Link from 'next/link'
-import Styles from '@/components/ModalLogin/modal-login.module.scss'
+import Styles from '@/components/LoginModal/modal-login.module.scss'
 
 export default function LoginForm() {
   const router = useRouter()
