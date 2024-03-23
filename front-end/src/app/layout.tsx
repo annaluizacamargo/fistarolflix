@@ -1,6 +1,7 @@
 'use client'
 
 import { UserProvider } from '@/providers/Profile'
+import { MovieProvider } from '@/providers/Movies'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import './globals.scss'
@@ -23,9 +24,11 @@ export default function RootLayout({
 
       <body>
         <UserProvider>
-          <Header />
-          <Auth>{children}</Auth>
-          <Footer />
+          <MovieProvider>
+            <Header />
+            <Auth>{children}</Auth>
+            <Footer />
+          </MovieProvider>
         </UserProvider>
       </body>
     </html>
