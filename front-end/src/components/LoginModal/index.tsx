@@ -1,7 +1,7 @@
 'use client'
 
-import LoginForm from '@/components/LoginModal/LoginForm/form'
-import RegisterForm from '@/components/LoginModal/RegisterForm/form'
+import LoginForm from './LoginForm/form'
+import RegisterForm from './RegisterForm/form'
 import Banner from '@/public/banner-login.png'
 import Logo from '@/public/fistarolflix-heart-logo.svg'
 import Image from 'next/image'
