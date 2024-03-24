@@ -8,13 +8,12 @@ export async function POST(request: Request) {
 
   // If the request is made from localhost, it will be sent to the back-end API
   // Else, it will return a fake response with a fake token to test the front-end
-  if (url.hostname != 'localhost') {
-    //TODO: MUDAR PARA ==
+  if (url.hostname == 'localhost') {
     try {
       const postData = await request.json()
       const { email, password } = postData
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +36,7 @@ export async function POST(request: Request) {
       id: 1,
       name: 'Usuário Teste',
       email: 'usuario@teste.com',
-      password: await hash('Wa123456', 8),
+      password: await hash('Wa123456', 10),
       isActive: true,
     }
 
@@ -46,7 +45,6 @@ export async function POST(request: Request) {
         id: fakeData.id,
         name: fakeData.name,
         email: fakeData.email,
-        isActive: fakeData.isActive,
       },
       process.env.NEXT_PUBLIC_SECRET_KEY || '',
       { expiresIn: '1h' }

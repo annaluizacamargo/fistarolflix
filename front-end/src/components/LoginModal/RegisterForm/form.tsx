@@ -1,12 +1,9 @@
-'use client'
-
-import { ILoginAndRegisterFormData, RegisterSchema, RegisterSchemaData } from '@/components/LoginModal/types'
+import { ILoginAndRegisterFormData } from '@/components/LoginModal/types'
 import { useUserContext } from '@/providers/Profile'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import PrimaryButton from '@/components/Button'
-import yupResolver from '@/components/LoginModal/yupResolver'
 import Link from 'next/link'
 import Styles from '../modal-login.module.scss'
 
@@ -14,35 +11,17 @@ export default function RegisterForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const { addUser } = useUserContext()
+  const [error, setError] = useState<string | null>(null)
 
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
-    clearErrors,
-    watch,
-  } = useForm<RegisterSchemaData>({
-    resolver: yupResolver(RegisterSchema),
-  })
-
-  const onHandleChangeRegister = (e: React.ChangeEvent<HTMLInputElement>, clearErrors: () => void) => {
-    clearErrors()
-  }
-
-  const watchEmail = watch('email')
-  const watchName = watch('name')
-  const watchPassword = watch('password')
-  const isEmailFilled = Boolean(watchEmail)
-  const isNameFilled = Boolean(watchName)
-  const isPasswordFilled = Boolean(watchPassword)
-
-  register('email', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
-  register('name', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
-  register('password', { onChange: (e) => onHandleChangeRegister(e, clearErrors) })
+  } = useForm<ILoginAndRegisterFormData>()
 
   const onSubmitHandler = async (data: ILoginAndRegisterFormData) => {
     setLoading(true)
+    setError(null)
 
     try {
       const response = await fetch('/api/register', {
@@ -53,12 +32,9 @@ export default function RegisterForm() {
         body: JSON.stringify(data),
       })
 
-      const responseData = await response.json()
-
-      if (response && response.ok) {
-        if (typeof window !== 'undefined') {
-          window.localStorage.setItem('token', responseData.token)
-        }
+      if (response.ok && typeof window !== 'undefined') {
+        const responseData = await response.json()
+        window.localStorage.setItem('token', responseData.token)
 
         const users = await fetch('/api/users', {
           method: 'POST',
@@ -69,61 +45,62 @@ export default function RegisterForm() {
         })
 
         const usersData = await users.json()
-
         addUser(usersData)
 
         router.push('/home')
       } else {
         setLoading(false)
-
-        setError('root', {
-          type: 'manual',
-          message: 'Houve um erro ao tentar cadastrar o usuário. Tente novamente.',
-        })
+        setError('Houve um erro ao tentar cadastrar o usuário. Tente novamente.')
       }
-    } catch (error: any) {
+    } catch (error) {
       setLoading(false)
-
-      setError('root', {
-        type: 'manual',
-        message: error,
-      })
+      setError('Ocorreu um erro durante o cadastro.')
     }
   }
 
   return (
-    <form
-      className={Styles.form}
-      style={{ gap: errors.root ? '0.5rem' : '2rem' }}
-      onSubmit={handleSubmit(onSubmitHandler)}
-    >
+    <form className={Styles.form} style={{ gap: error ? '0.5rem' : '2rem' }} onSubmit={handleSubmit(onSubmitHandler)}>
       <div className={Styles.inputsRegister}>
         <input
           id="email"
           type="email"
-          autoComplete={'email'}
+          autoComplete="email"
           title="Email"
           placeholder="Informe seu email"
-          {...register('email')}
+          {...register('email', { required: 'Informe seu e-mail', onChange: () => setError(null) })}
         />
-        <input id="name" type="text" title="Nome" placeholder="Informe seu nome" {...register('name')} />
 
-        <input id="password" type="password" title="Senha" placeholder="Insira sua senha" {...register('password')} />
+        <input
+          id="name"
+          type="text"
+          title="Nome"
+          placeholder="Informe seu nome"
+          {...register('name', { required: 'Informe seu nome', onChange: () => setError(null) })}
+        />
+
+        <input
+          id="password"
+          type="password"
+          title="Senha"
+          placeholder="Insira sua senha"
+          {...register('password', { required: 'Informe sua senha', onChange: () => setError(null) })}
+        />
       </div>
 
-      <div className={Styles.buttons}>
-        {errors.root && (
-          <div id="error" className={Styles.error}>
-            {errors.root.message}
-          </div>
-        )}
+      {error && (
+        <div id="error" className={Styles.error}>
+          {error}
+        </div>
+      )}
 
-        <PrimaryButton type={'submit'} disabled={!isEmailFilled || !isPasswordFilled || !isNameFilled || loading}>
+      <div className={Styles.buttons}>
+        <PrimaryButton type="submit" disabled={loading}>
           {loading ? 'Carregando...' : 'Cadastrar'}
         </PrimaryButton>
 
         <div className={Styles.newHere}>
           <span>Já possui uma conta?</span>
+
           <Link href="/login">Faça seu login</Link>
         </div>
       </div>

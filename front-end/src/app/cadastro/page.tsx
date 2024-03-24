@@ -1,5 +1,5 @@
-import LoginModal from '@/components/LoginModal'
+import ModalLogin from '@/components/ModalLogin'
 
 export default function Register() {
-  return <LoginModal />
+  return <ModalLogin />
 }

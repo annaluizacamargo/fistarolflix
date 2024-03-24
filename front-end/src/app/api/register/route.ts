@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       const postData = await request.json()
       const { email, password, name } = postData
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       id: 1,
       name: 'Usuário Teste',
       email: 'usuario@teste.com',
-      password: await hash('Wa123456', 8),
+      password: await hash('Wa123456', 10),
       isActive: true,
     }
 
