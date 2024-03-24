@@ -1,5 +1,5 @@
-import ProfileIcon from '@/public/user-molde.svg'
 import { IProfileOption, IProfileOptionModal } from './types'
+import ProfileIcon from '@/public/user-molde.svg'
 import Image from 'next/image'
 import Styles from '../header.module.scss'
 

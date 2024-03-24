@@ -2,49 +2,52 @@
 
 import { IMovie } from '@/types/movie'
 import { useEffect, useState } from 'react'
+import PrimaryButton from '@/components/Button'
 import BannerImage from '@/public/banner-leo.png'
 import BannerSadImage from '@/public/banner-leo-sad.png'
+import CloseModalIcon from '@/public/close-logo.svg'
 import Image from 'next/image'
 import Style from './home.module.scss'
-import PrimaryButton from '@/components/Button'
 
 export default function Home() {
-  const MOVIES_TO_SHOW = 6
-  const [allContent, setAllContent] = useState<IMovie[]>([])
+  const PAGE_SIZE = 3
+
+  const [movies, setMovies] = useState<IMovie[]>([])
   const [content, setContent] = useState<IMovie[]>([])
   const [isLast, setLast] = useState(false)
-  const [itens, setItens] = useState(MOVIES_TO_SHOW)
+  const [pageNumber, setPageNumber] = useState(1)
   const [openModal, setOpenModal] = useState(false)
   const [selectedMovie, setSelectedMovie] = useState<IMovie | null>(null)
 
   useEffect(() => {
-    fetch('/api/movies', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setAllContent(data)
-        setContent(data.slice(0, itens))
-      })
+    getMovies(pageNumber, PAGE_SIZE)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const moreMovies = () => {
-    const newItens = itens + MOVIES_TO_SHOW
-    const newContent = allContent.slice(0, newItens)
-    setContent(newContent)
-    setItens(newItens)
-    setLast(newItens >= allContent.length)
+    const newPage = pageNumber + 1
 
-    if (newItens >= allContent.length) {
-      setLast(true)
+    if (!isLast) {
+      setPageNumber(newPage)
+      getMovies(newPage, PAGE_SIZE)
     }
   }
 
+  async function getMovies(pageNumber: number, pageSize: number) {
+    fetch(`/api/movies?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setContent([...content, ...data])
+
+        if (data.length < PAGE_SIZE) {
+          setLast(true)
+        }
+      })
+  }
+
   function openDatails(item: IMovie) {
-    console.log('item', item)
     setSelectedMovie(item)
     setOpenModal(true)
   }
@@ -77,6 +80,35 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      {openModal && (
+        <div className={Style.modalBackground}>
+          <div className={Style.modal}>
+            <div className={Style.closeModal} onClick={() => setOpenModal(false)}>
+              <Image src={CloseModalIcon} alt="Fechar modal" width={24} height={24} />
+            </div>
+
+            <div className={Style.modalContent}>
+              <Image src={selectedMovie?.posterUrl ?? ''} alt={selectedMovie?.title ?? ''} width={182} height={274} />
+
+              <div className={Style.modalInfo}>
+                <h2>{selectedMovie?.title}</h2>
+
+                <ul>
+                  <li>Duração: {selectedMovie?.duration}min</li>
+                  <li>Classificação Etária: {selectedMovie?.ageRating}</li>
+                  <li>Ano de Lançamento: {selectedMovie?.year}</li>
+                </ul>
+
+                <div className={Style.Synopsis}>
+                  <span>Sinopse:</span>
+                  <p>{selectedMovie?.synopsis}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -20,7 +20,7 @@ class MovieController {
       duration,
       year,
       trailerUrl,
-      sinonpsis,
+      synopsis,
       posterUrl,
       ageRating,
     } = request.body;
@@ -31,7 +31,7 @@ class MovieController {
       duration,
       year,
       trailerUrl,
-      sinonpsis,
+      synopsis,
       posterUrl,
       ageRating,
       true
@@ -87,7 +87,7 @@ class MovieController {
       duration,
       year,
       trailerUrl,
-      sinonpsis,
+      synopsis,
       posterUrl,
       ageRating,
     } = request.body;
@@ -106,7 +106,7 @@ class MovieController {
       duration,
       year,
       trailerUrl,
-      sinonpsis,
+      synopsis,
       posterUrl,
       ageRating,
     });

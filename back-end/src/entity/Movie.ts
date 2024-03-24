@@ -11,7 +11,7 @@ import { IMovie } from "../dto/IMovie";
  * @property {number} duration - Movie duration
  * @property {number} year - Movie year
  * @property {string} trailerUrl - Movie trailer url
- * @property {string} sinonpsis - Movie sinonpsis
+ * @property {string} synopsis - Movie synopsis
  * @property {string} posterUrl - Movie poster url
  * @property {string} ageRating - Movie age rating
  */
@@ -24,7 +24,7 @@ export class Movie {
     duration: IMovie["duration"],
     year: IMovie["year"],
     trailerUrl: IMovie["trailerUrl"],
-    sinonpsis: IMovie["sinonpsis"],
+    synopsis: IMovie["synopsis"],
     posterUrl: IMovie["posterUrl"],
     ageRating: IMovie["ageRating"],
     isActive: IMovie["isActive"]
@@ -35,7 +35,7 @@ export class Movie {
     this.duration = duration;
     this.year = year;
     this.trailerUrl = trailerUrl;
-    this.sinonpsis = sinonpsis;
+    this.synopsis = synopsis;
     this.posterUrl = posterUrl;
     this.ageRating = ageRating;
     this.isActive = isActive;
@@ -63,7 +63,7 @@ export class Movie {
   trailerUrl: string;
 
   @Column()
-  sinonpsis: string;
+  synopsis: string;
 
   @Column()
   posterUrl: string;

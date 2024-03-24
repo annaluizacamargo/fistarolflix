@@ -42,7 +42,7 @@ class MovieRepository {
     duration,
     year,
     trailerUrl,
-    sinonpsis,
+    synopsis,
     posterUrl,
     ageRating,
   }: {
@@ -53,7 +53,7 @@ class MovieRepository {
     duration: IMovie["duration"];
     year: IMovie["year"];
     trailerUrl: IMovie["trailerUrl"];
-    sinonpsis: IMovie["sinonpsis"];
+    synopsis: IMovie["synopsis"];
     posterUrl: IMovie["posterUrl"];
     ageRating: IMovie["ageRating"];
   }) {
@@ -64,7 +64,7 @@ class MovieRepository {
       duration,
       year,
       trailerUrl,
-      sinonpsis,
+      synopsis,
       posterUrl,
       ageRating,
     });

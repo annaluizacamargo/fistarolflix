@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   const postData = await request.json()
 
   if (!postData.isMock) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

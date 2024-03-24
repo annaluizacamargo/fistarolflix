@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       id: 1,
       name: 'Usuário Teste',
       email: 'usuario@teste.com',
-      password: await hash('Wa123456', 10),
+      password: await hash('SenhaTeste123', 10),
       isActive: true,
     }
 

@@ -6,7 +6,7 @@ export interface IMovie {
   duration?: number;
   year?: number;
   trailerUrl?: string;
-  sinonpsis?: string;
+  synopsis?: string;
   posterUrl?: string;
   ageRating?: string;
   isActive?: boolean;
