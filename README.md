@@ -15,6 +15,9 @@ O desafio consiste em desenvolver um sistema de streaming de filmes, utilizando 
 6. Abra a URL `http://localhost:3000` em seu navegador.
 7. Aproveite!
 
+![Descrição da imagem](https://i.ibb.co/zXwpHcG/Molde.png)
+
+
 ### Back-end:
 1. Clone este repositório em sua máquina local utilizando `git clone`.
 2. Navegue até a pasta `back-end`.
