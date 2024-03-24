@@ -21,6 +21,9 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "yup": "^0.32.11",
-    "sass": "^1.49.8"
+    "sass": "^1.49.8",
+    "react-hook-form": "^7.0.0",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^9.0.2"
   }
 }
