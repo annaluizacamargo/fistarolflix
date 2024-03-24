@@ -53,9 +53,10 @@ class MovieController {
   }
 
   async get(request: Request, response: Response) {
+    const pageNumber = parseInt(request.query.pageNumber as string) || 1;
+    const pageSize = parseInt(request.query.pageSize as string) || 1;
     const movieRepository = new MovieRepository();
-    const data = await movieRepository.findMovies();
-
+    const data = await movieRepository.findMovies(pageNumber, pageSize);
     return response.json(data);
   }
 
@@ -64,7 +65,7 @@ class MovieController {
     const movieCodeNumber = parseInt(code);
 
     if (isNaN(movieCodeNumber)) {
-      return response.sendStatus(400); 
+      return response.sendStatus(400);
     }
 
     const movieRepository = new MovieRepository();

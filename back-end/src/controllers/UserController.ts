@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../entity/User";
 import { hash, compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import { mapUserToViewModel, mapUsersToViewModels } from "../mapper/UserMapper";
 import UserRepository from "../repository/UserRepository";
 
 /**
@@ -23,7 +24,7 @@ class UserController {
       return response.sendStatus(400);
     }
 
-    const hashedPassword = await hash(password ?? "", 8);
+    const hashedPassword = await hash(password ?? "", 10);
     const user = new User(name, email, hashedPassword, true);
     const userRepository = new UserRepository();
     const userAlreadyCreate = await userRepository.findByEmail(email);
@@ -41,15 +42,16 @@ class UserController {
     const token = sign(
       {
         id: data.id,
-        name: data.email,
+        name: data.name,
         email: data.email,
-        isActive: data.isActive,
       },
       process.env.SECRET_KEY || "",
       { expiresIn: "1h" }
     );
 
-    return response.status(201).json({ data, token });
+    const responseData = mapUserToViewModel(data);
+
+    return response.status(201).json({ responseData, token });
   }
 
   async login(request: Request, response: Response) {
@@ -70,16 +72,17 @@ class UserController {
     const token = sign(
       {
         id: data.id,
-        name: data.email,
+        name: data.name,
         email: data.email,
-        isActive: data.isActive,
       },
       process.env.SECRET_KEY || "",
       { expiresIn: "1h" }
     );
 
+    const responseData = mapUserToViewModel(data);
+
     return response.json({
-      data,
+      responseData,
       token,
     });
   }
@@ -87,8 +90,9 @@ class UserController {
   async get(request: Request, response: Response) {
     const userRepository = new UserRepository();
     const data = await userRepository.findUsers();
+    const responseDataList = mapUsersToViewModels(data);
 
-    return response.json(data);
+    return response.json(responseDataList);
   }
 
   async getById(request: Request, response: Response) {
@@ -106,7 +110,9 @@ class UserController {
       return response.sendStatus(404);
     }
 
-    return response.json(data);
+    const responseData = mapUserToViewModel(data);
+
+    return response.json(responseData);
   }
 
   async getByEmail(request: Request, response: Response) {
@@ -118,7 +124,9 @@ class UserController {
       return response.sendStatus(404);
     }
 
-    return response.json(data);
+    const responseData = mapUserToViewModel(data);
+
+    return response.json(responseData);
   }
 
   async update(request: Request, response: Response) {

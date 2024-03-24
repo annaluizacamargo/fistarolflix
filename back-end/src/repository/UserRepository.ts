@@ -23,15 +23,15 @@ class UserRepository {
   }
 
   async findUsers() {
-    return await this.repository.find();
+    return await this.repository.find({ where: { isActive: true } });
   }
 
   async findByEmail(email: IUser["email"]) {
-    return this.repository.findOne({ where: { email } });
+    return this.repository.findOne({ where: { email, isActive: true } });
   }
 
   async findById(id: IUser["id"]) {
-    return this.repository.findOne({ where: { id } });
+    return this.repository.findOne({ where: { id, isActive: true } });
   }
 
   async updateUser({ id, name, email, hashedPassword }: IUser) {

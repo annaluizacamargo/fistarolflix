@@ -1,4 +1,4 @@
-# 👩🏻‍💻 FistarolFlix Back-end 👩🏻
+# 👩🏻‍💻 FistarolFlix Back-end
 <br>
 <a href="#portuguese">Readme em Português</a> || <a href="#english">Readme in English</a>
 
@@ -10,15 +10,15 @@ Projeto construído com TypeORM, Express e Docker, utilizando TypeScript, MySQL 
 
 ## 💻 Rodando o projeto:
 1. Clone este repositório em sua máquina local utilizando git clone.
-2. Certifique-se de ter o Docker, Node.js, npm e postman ou insomnia instalados em sua máquina.
+2. Certifique-se de ter o Docker, Node.js, npm e Postman instalados em sua máquina.
 3. Execute o comando `npm install`.
 4. Edite o nome da pasta .env.exemplo para apenas .env.
 5. Execute o comando `docker-compose up -d` para iniciar o banco de dados.
 6. Execute o comando `docker-compose ps -a` para verificar se o banco de dados está rodando.
-7. Execute o comando `npm start` para iniciar o servidor, ele estar rodando na porta 3333.
-8. Execute o comando `npm run migration migration:generate src/migrations/[$nome-da-migration]` para criar uma nova migration.
-9. Execute o comando `npm run migration:up` para rodar todas as migrations.
-10. Abra o Postman ou Insomnia para testar as rotas.
+7. Execute o comando `npm run migration migration:generate src/migrations/[$nome-da-migration]` para criar uma nova migration.
+8. Execute o comando `npm run migration:up` para rodar todas as migrations.
+9. Execute o comando `npm start` para iniciar o servidor, ele estar rodando na porta 3333.
+10. Abra o Postman para testar as rotas.
 11. Aproveite!
 <br><br>
 
@@ -40,15 +40,15 @@ Project built with TypeORM, Express and Docker, using TypeScript, MySQL and JWT 
 
 ## 💻 Running the project:
 1. Clone this repository on your local machine using git clone.
-2. Make sure you have Docker, Node.js, npm and postman or insomnia installed on your machine.
+2. Make sure you have Docker, Node.js, npm and Postman installed on your machine.
 3. Run the `npm install` command.
 4. Edit the name of the .env.example folder to just .env.
 5. Run the `docker-compose up -d` command to start the database.
 6. Run the `docker-compose ps -a` command to check if the database is running.
-7. Run the `npm start` command to start the server, it is running on port 3333.
-8. Run the `npm run migration migration:generate src/migrations/[$migration-name]` command to create a new migration.
-9. Run the `npm run migration:up` command to run all migrations.
-10. Open Postman or Insomnia to test the routes.
+7. Run the `npm run migration migration:generate src/migrations/[$migration-name]` command to create a new migration.
+8. Run the `npm run migration:up` command to run all migrations.
+9. Run the `npm start` command to start the server, it is running on port 3333.
+10. Open Postman to test the routes.
 11. Enjoy!
 <br><br>
 

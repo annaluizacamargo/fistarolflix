@@ -8,7 +8,7 @@ import { IMovie } from "../dto/IMovie";
  * @class
  * @property {Repository<Movie>} repository - Repository of movie entity
  * @method createAndSave - Method to create and save a movie
- * @method findMovies - Method to find all movies
+ * @method findMovies - Method to find the movies with pagination
  * @method findById - Method to find a movie by id
  * @method updateMovie - Method to update a movie
  * @method enableOrDisableMovie - Method to enable or disable a movie
@@ -21,8 +21,13 @@ class MovieRepository {
     return await this.repository.save(movie);
   }
 
-  async findMovies() {
-    return await this.repository.find();
+  async findMovies(pageNumber: number, pageSize: number) {
+    return await this.repository
+      .createQueryBuilder("movie")
+      .orderBy("movie.year", "DESC")
+      .skip((pageNumber - 1) * pageSize)
+      .take(pageSize)
+      .getMany();
   }
 
   async findById(movieCode: IMovie["movieCode"]) {

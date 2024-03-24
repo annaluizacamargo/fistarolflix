@@ -50,7 +50,6 @@ export class Movie {
   @Column()
   title: string;
 
-  //TODO: change to id genre
   @Column()
   genres: string;
 
